@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://106.13.101.17:3306/javazx?useSSL=false&characterEncoding=UTF-8
+    #river-class-name: com.mysql.jdbc.Driver
+    #jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false
+    #url:jdbc: mysql://106.13.101.17:3306/javazx?useSSL=false&characterEncoding=UTF-8
+    username: root
+    password: 521761
+
+logging:
+  level:
+   root: warn
+   com.java8.dao: trace
+  pattern:
+    console: '%p%m%n'
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
