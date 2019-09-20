@@ -9,21 +9,29 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
+ * 自动填充测试类
+ *
  * @author itmrchen
  * @date 2019/9/20 0:44
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MyTest {
+public class MyFillTest {
     @Resource
     private UserMapper userMapper;
 
     @Test
-    public void deleteById() {
-        Integer rows = userMapper.deleteById(1094592041087729666L);
+    public void insert() {
+        User user = new User();
+        user.setName("李海");
+        user.setAge(21);
+        user.setManagerId(1088248166370832385L);
+        user.setEmail("3232323@qq.com");
+        Integer rows = userMapper.insert(user);
         System.out.println("影响行数：" + rows);
     }
 
@@ -36,8 +44,9 @@ public class MyTest {
     @Test
     public void updateById() {
         User user = new User();
-        user.setAge(88);
+        user.setAge(89);
         user.setId(1088248166370832385L);
+        user.setUpdateTime(new Date());
         Integer rows = userMapper.updateById(user);
         System.out.println("影响行数：" + rows);
     }

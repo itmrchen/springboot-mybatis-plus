@@ -1,5 +1,7 @@
 package com.java8.config;
 
+import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -9,4 +11,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MybatisPlusConfiguration {
 
+    /**
+     * 乐观锁插件
+     * @return
+     */
+    @Bean
+    public OptimisticLockerInterceptor optimisticLockerInterceptor() {
+        return new OptimisticLockerInterceptor();
+    }
 }
