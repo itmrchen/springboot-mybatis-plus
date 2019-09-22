@@ -3,6 +3,8 @@ package com.java8.config;
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
 import com.baomidou.mybatisplus.core.parser.ISqlParserFilter;
 import com.baomidou.mybatisplus.core.parser.SqlParserHelper;
+import com.baomidou.mybatisplus.extension.parsers.DynamicTableNameParser;
+import com.baomidou.mybatisplus.extension.parsers.ITableNameHandler;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantHandler;
@@ -18,6 +20,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author itmrchen
@@ -25,9 +29,11 @@ import java.util.ArrayList;
  */
 @Configuration
 public class MybatisPlusConfiguration {
+    public static ThreadLocal<String> myTableName = new ThreadLocal<>();
 
     /**
      * 乐观锁插件
+     *
      * @return
      */
     @Bean
@@ -38,21 +44,23 @@ public class MybatisPlusConfiguration {
     /**
      * 性能分析插件
      * 设置 dev test 环境开启
+     *
      * @return
      */
     @Bean
     @Profile({"dev", "test"})
-    public PerformanceMonitorInterceptor performanceMonitorInterceptor(){
+    public PerformanceMonitorInterceptor performanceMonitorInterceptor() {
         PerformanceMonitorInterceptor performanceMonitorInterceptor = new PerformanceMonitorInterceptor();
         return performanceMonitorInterceptor;
     }
 
     /**
      * 实现多租户 分页插件必备  所有条件中会加入 AND user.manager_id = 1088248166370832385
+     *
      * @return
      */
     @Bean
-    public PaginationInterceptor paginationInterceptor(){
+    public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
         ArrayList<ISqlParser> sqlParsersList = new ArrayList<>();
         TenantSqlParser tenantSqlParser = new TenantSqlParser();
@@ -73,6 +81,19 @@ public class MybatisPlusConfiguration {
             }
         });
         sqlParsersList.add(tenantSqlParser);
+
+        DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser();
+        Map<String, ITableNameHandler> tableNameHandlerMap = new HashMap<>(16);
+        tableNameHandlerMap.put("user", new ITableNameHandler() {
+            @Override
+            public String dynamicTableName(MetaObject metaObject, String sql, String tableName) {
+                return myTableName.get();
+            }
+        });
+        dynamicTableNameParser.setTableNameHandlerMap(tableNameHandlerMap);
+        sqlParsersList.add(dynamicTableNameParser);
+
+
         /**
          * 可以在Mapper方法上加入 @SqlParser(filter = true) 解决 效果一样 {@link UserMapper}
          */
@@ -88,6 +109,7 @@ public class MybatisPlusConfiguration {
                 return false;
             }
         });*/
+        paginationInterceptor.setSqlParserList(sqlParsersList);
         return paginationInterceptor;
     }
 }

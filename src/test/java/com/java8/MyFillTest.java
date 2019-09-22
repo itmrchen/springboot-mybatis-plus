@@ -1,6 +1,7 @@
 package com.java8;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.java8.config.MybatisPlusConfiguration;
 import com.java8.dao.UserMapper;
 import com.java8.entity.User;
 import org.junit.Test;
@@ -37,6 +38,8 @@ public class MyFillTest {
 
     @Test
     public void select() {
+        //动态表名解析器
+        MybatisPlusConfiguration.myTableName.set("user2019");
         List<User> userList = userMapper.selectList(null);
         userList.forEach(System.out::println);
     }
@@ -56,6 +59,8 @@ public class MyFillTest {
      */
     @Test
     public void mySelect() {
+        //动态表名解析器 有@SqlParser(filter = true) 过滤时  动态表名解析器无效
+        MybatisPlusConfiguration.myTableName.set("user2019");
         //.eq(User::getDeleted,0)
         List<User> userList = userMapper.mySelectList(Wrappers.<User>lambdaQuery().gt(User::getAge, 30));
         userList.forEach(System.out::println);
