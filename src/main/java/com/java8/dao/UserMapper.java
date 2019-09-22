@@ -14,9 +14,11 @@ import java.util.List;
  * @author itmrchen
  * @date 2019/9/20 0:32
  */
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper extends CommonMapper<User> {
 
     @SqlParser(filter = true)
     @Select("select * from user ${ew.customSqlSegment}")
     List<User> mySelectList(@Param(Constants.WRAPPER) Wrapper<User> wrapper);
+
+
 }

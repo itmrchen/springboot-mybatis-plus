@@ -64,7 +64,7 @@ public class MybatisPlusConfiguration {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
         ArrayList<ISqlParser> sqlParsersList = new ArrayList<>();
         TenantSqlParser tenantSqlParser = new TenantSqlParser();
-        tenantSqlParser.setTenantHandler(new TenantHandler() {
+        /*tenantSqlParser.setTenantHandler(new TenantHandler() {
             @Override
             public Expression getTenantId(boolean where) {
                 return new LongValue(1088248166370832385L);
@@ -80,7 +80,7 @@ public class MybatisPlusConfiguration {
                 return false;
             }
         });
-        sqlParsersList.add(tenantSqlParser);
+        sqlParsersList.add(tenantSqlParser);*/
 
         DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser();
         Map<String, ITableNameHandler> tableNameHandlerMap = new HashMap<>(16);

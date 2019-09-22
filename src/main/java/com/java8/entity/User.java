@@ -16,6 +16,7 @@ import java.util.Date;
 public class User {
     private Long id;
     private String name;
+    @TableField(fill = FieldFill.UPDATE)
     private Integer age;
     private String email;
     private Long managerId;
